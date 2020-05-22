@@ -10,6 +10,9 @@ public class Stack {
 	public void push(char input) {
 		stack.addFirst(input);
 	}
+	public void clear() {
+		stack.clear();
+	}
 	public char pop() throws ArrayIndexOutOfBoundsException {
 		if(stack.isEmpty())
 			throw new ArrayIndexOutOfBoundsException("Removing value from empty stack");
