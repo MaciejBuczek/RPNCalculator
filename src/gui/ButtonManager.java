@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 
 public class ButtonManager implements ActionListener{
 	
-	private char[] buttonActions = {'!','(',')','<','%','s','^','/','9','8','7','X',
-			'6','5','4','-','3','2','1','+','C','0',',','='};
+	private char[] buttonActions = {'!','(',')','<','%','s','^','/','7','8','9','X',
+			'4','5','6','-','1','2','3','+','C','0',',','='};
 	private EquationDisplayManager equationDisplayManager;
 	public ButtonManager(EquationDisplayManager equationDisplayManager) {
 		this.equationDisplayManager = equationDisplayManager;
@@ -44,8 +44,21 @@ public class ButtonManager implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getActionCommand());
-		equationDisplayManager.getEquation().addToEquation(e.getActionCommand().charAt(0));
+		char command = e.getActionCommand().charAt(0);
+		switch(command) {
+			case '<':
+				equationDisplayManager.getEquation().removeFromEquation();
+				break;
+			case 'C':
+				equationDisplayManager.getEquation().clearEquation();
+				break;
+			case '=':
+				equationDisplayManager.getEquation().generatePrefix();
+				break;
+			default:
+				equationDisplayManager.getEquation().addToEquation(command);
+				break;
+		}
 		equationDisplayManager.reloadInfix();
 	}
 }
