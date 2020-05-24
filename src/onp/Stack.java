@@ -18,4 +18,14 @@ public class Stack {
 			throw new ArrayIndexOutOfBoundsException("Removing value from empty stack");
 		return stack.poll();
 	}
+	public char peek() {
+		return stack.peek();
+	}
+	public boolean isEmpty() {
+		
+		if(stack.size()>0)
+			return false;
+		else
+			return true;
+	}
 }

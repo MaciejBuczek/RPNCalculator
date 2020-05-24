@@ -17,9 +17,12 @@ public class ButtonManager implements ActionListener{
 	
 	private char[] buttonActions = {'!','(',')','<','%','s','^','/','7','8','9','X',
 			'4','5','6','-','1','2','3','+','C','0',',','='};
-	private EquationDisplayManager equationDisplayManager;
-	public ButtonManager(EquationDisplayManager equationDisplayManager) {
-		this.equationDisplayManager = equationDisplayManager;
+	//private InfixDisplayManager infixDisplayManager;
+	private GUI gui;
+	
+	public ButtonManager(GUI gui) {
+		//this.infixDisplayManager = infixDisplayManager;
+		this.gui=gui;
 	}
 	public void createButtons(JFrame frame, Font font) {
 		int it=0;
@@ -47,18 +50,24 @@ public class ButtonManager implements ActionListener{
 		char command = e.getActionCommand().charAt(0);
 		switch(command) {
 			case '<':
-				equationDisplayManager.getEquation().removeFromEquation();
+				gui.getInfixDisplayManager().getEquation().removeFromEquation();
+				//infixDisplayManager.getEquation().removeFromEquation();
 				break;
 			case 'C':
-				equationDisplayManager.getEquation().clearEquation();
+				gui.getInfixDisplayManager().getEquation().clearEquation();
+				//infixDisplayManager.getEquation().clearEquation();
 				break;
 			case '=':
-				equationDisplayManager.getEquation().generatePrefix();
+				gui.getPostfixDisplayManager().getEquation().generatePostfix();
+				gui.getPostfixDisplayManager().reloadPostfix();
+				//infixDisplayManager.getEquation().generatePrefix();
+				
 				break;
 			default:
-				equationDisplayManager.getEquation().addToEquation(command);
+				gui.getInfixDisplayManager().getEquation().addToEquation(command);
+				//infixDisplayManager.getEquation().addToEquation(command);
 				break;
 		}
-		equationDisplayManager.reloadInfix();
+		gui.getInfixDisplayManager().reloadInfix();
 	}
 }

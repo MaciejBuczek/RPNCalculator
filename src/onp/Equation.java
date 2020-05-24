@@ -1,7 +1,5 @@
 package onp;
 
-import java.util.Arrays;
-
 enum SymbolType{
 	None,
 	Operation1arg,
@@ -14,25 +12,29 @@ enum SymbolType{
 }
 
 public class Equation {
+	
+	private InfixToPostfixConverter converter;
+	
 	private String infix;
-	private String prefix;
+	private String postfix;
+	
 	private SymbolType previousSymbol;
 	private int opendBrackets;
 	private int closedBrackets;
-	private boolean isComaSet;
-	private boolean canAddZero;
-	private boolean isFirstDigit; 	
+	
 	public Equation() {
+		
+		converter = new InfixToPostfixConverter();
+		
 		this.infix="";
 		this.previousSymbol=SymbolType.None;
 		this.opendBrackets=0;
 		this.closedBrackets=0;
-		this.isComaSet=false;
-		this.isFirstDigit=false;
-		
-		this.canAddZero=true;
 	}
 	public void addToEquation(char symbol) {
+		boolean isComaSet = false;
+		boolean canAddZero = true;
+		boolean isFirstDigit = false; 	
 		switch(symbol) {
 			case '0':
 				if(canAddZero) {
@@ -120,9 +122,11 @@ public class Equation {
 	public void clearEquation() {
 		infix="";
 	}
-	public void generatePrefix() throws IllegalArgumentException {
+	public void generatePostfix() throws IllegalArgumentException {
 		if(closedBrackets != opendBrackets)
 			throw new IllegalArgumentException("Not all brackets are closed");
+		
+		postfix = converter.convertInfixToPostfix(infix);
 	}
 	public String getInfix() {
 		if(infix.isEmpty())
@@ -130,8 +134,11 @@ public class Equation {
 		else
 			return infix;
 	}
-	public String getPrefix() {
-		return prefix;
+	public String getPostfix() {
+		if(infix.isEmpty())
+			return "0";
+		else
+			return postfix;
 	}
 	
 }
