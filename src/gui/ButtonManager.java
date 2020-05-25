@@ -50,20 +50,23 @@ public class ButtonManager implements ActionListener{
 		char command = e.getActionCommand().charAt(0);
 		switch(command) {
 			case '<':
-				gui.getInfixDisplayManager().getEquation().removeFromEquation();
+				gui.getEquation().removeFromEquation();
 				break;
 			case 'C':
-				gui.getInfixDisplayManager().getEquation().clearEquation();
+				gui.getEquation().clearEquation();
 				break;
 			case '=':
-				gui.getPostfixDisplayManager().getEquation().generatePostfix();
-				gui.getPostfixDisplayManager().reloadPostfix();
-				
+				gui.getEquation().generatePostfix();
+				gui.getResultDisplayManager().refresh();
+				gui.getPostfixDisplay().refreshPostfix();
 				break;
 			default:
-				gui.getInfixDisplayManager().getEquation().addToEquation(command);
+				if(gui.getEquation().isPostfixGenerated()) {
+					gui.getEquation().clearEquation();
+				}
+				gui.getEquation().addToEquation(command);
 				break;
 		}
-		gui.getInfixDisplayManager().reloadInfix();
+		gui.getInfixDisplay().refreshInfix();
 	}
 }

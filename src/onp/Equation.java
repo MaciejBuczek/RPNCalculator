@@ -20,6 +20,8 @@ public class Equation {
 	
 	private String infix;
 	private String postfix;
+	private double result;
+	private boolean isPostfixGenerated;
 	
 	private List<SymbolType> symbolTypes;
 	private int opendBrackets;
@@ -38,6 +40,7 @@ public class Equation {
 		symbolTypes.add(SymbolType.None);
 		this.opendBrackets=0;
 		this.closedBrackets=0;
+		this.isPostfixGenerated=false;
 	}
 	public void addToEquation(char symbol) {
 		SymbolType previousSymbol = symbolTypes.get(symbolTypes.size()-1);	
@@ -129,6 +132,7 @@ public class Equation {
 	public void clearEquation() {
 		symbolTypes.clear();
 		symbolTypes.add(SymbolType.None);
+		isPostfixGenerated=false;
 		infix="";
 	}
 	public void generatePostfix() throws IllegalArgumentException {
@@ -136,6 +140,7 @@ public class Equation {
 			throw new IllegalArgumentException("Not all brackets are closed");
 		
 		postfix = converter.convertInfixToPostfix(infix);
+		isPostfixGenerated=true;
 	}
 	public String getInfix() {
 		if(infix.isEmpty())
@@ -149,5 +154,10 @@ public class Equation {
 		else
 			return postfix;
 	}
-	
+	public double getResult() {
+		return result;
+	}
+	public boolean isPostfixGenerated() {
+		return isPostfixGenerated;
+	}
 }
