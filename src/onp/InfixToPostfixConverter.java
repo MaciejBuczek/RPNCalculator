@@ -14,7 +14,7 @@ public class InfixToPostfixConverter {
 		switch(symbol) {
 			case '!':
 			case '^':
-			case 's':
+			case '\u221A':
 				return 3;
 			case 'X':
 			case '/':
@@ -29,7 +29,7 @@ public class InfixToPostfixConverter {
 	}
 	
 	public String convertInfixToPostfix(String infix) {
-		
+		//reverse
 		String postfix="";
 		char symbol;
 		
@@ -48,9 +48,9 @@ public class InfixToPostfixConverter {
 					break;
 				case '!':
 				case '^':
-				case 's':
-				case 'X':
-				case '/':
+				case '\u221A':
+				case '\u00D7':
+				case '\u00F7':
 				case '%':
 				case '+':
 				case '-':

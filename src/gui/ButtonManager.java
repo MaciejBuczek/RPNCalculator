@@ -14,14 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ButtonManager implements ActionListener{
-	
-	private char[] buttonActions = {'!','(',')','<','%','s','^','/','7','8','9','X',
+	//\u221A - root
+	//\u00F7 - division
+	//\u00D7 - multiplication
+	private char[] buttonActions = {'!','(',')','<','%','\u221A','^','\u00F7','7','8','9','\u00D7',
 			'4','5','6','-','1','2','3','+','C','0',',','='};
-	//private InfixDisplayManager infixDisplayManager;
 	private GUI gui;
 	
 	public ButtonManager(GUI gui) {
-		//this.infixDisplayManager = infixDisplayManager;
 		this.gui=gui;
 	}
 	public void createButtons(JFrame frame, Font font) {
@@ -51,21 +51,17 @@ public class ButtonManager implements ActionListener{
 		switch(command) {
 			case '<':
 				gui.getInfixDisplayManager().getEquation().removeFromEquation();
-				//infixDisplayManager.getEquation().removeFromEquation();
 				break;
 			case 'C':
 				gui.getInfixDisplayManager().getEquation().clearEquation();
-				//infixDisplayManager.getEquation().clearEquation();
 				break;
 			case '=':
 				gui.getPostfixDisplayManager().getEquation().generatePostfix();
 				gui.getPostfixDisplayManager().reloadPostfix();
-				//infixDisplayManager.getEquation().generatePrefix();
 				
 				break;
 			default:
 				gui.getInfixDisplayManager().getEquation().addToEquation(command);
-				//infixDisplayManager.getEquation().addToEquation(command);
 				break;
 		}
 		gui.getInfixDisplayManager().reloadInfix();

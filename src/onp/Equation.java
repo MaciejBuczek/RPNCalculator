@@ -72,7 +72,7 @@ public class Equation {
 				}
 				break;
 			case '!':
-			case 's':
+			case '\u221A':
 				if(previousSymbol==SymbolType.None || previousSymbol==SymbolType.BracketOpend || previousSymbol==SymbolType.Operation2arg) {
 					infix+=symbol;
 					canAddZero=true;
@@ -82,8 +82,8 @@ public class Equation {
 				break;
 			case '+':
 			case '*':
-			case '/':
-			case 'X':
+			case '\u00F7':
+			case '\u00D7':
 			case '%':
 			case '^':
 				if(previousSymbol == SymbolType.Number || previousSymbol==SymbolType.Zero || previousSymbol==SymbolType.BracketClosed || previousSymbol==SymbolType.Operation1arg ) {
