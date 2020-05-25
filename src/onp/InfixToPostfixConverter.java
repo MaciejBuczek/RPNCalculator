@@ -16,8 +16,8 @@ public class InfixToPostfixConverter {
 			case '^':
 			case '\u221A':
 				return 3;
-			case 'X':
-			case '/':
+			case '\u00D7':
+			case '\u00F7':
 			case '%':
 				return 2;
 			case '+':

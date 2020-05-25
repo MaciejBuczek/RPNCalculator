@@ -1,5 +1,8 @@
 package onp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 enum SymbolType{
 	None,
 	Operation1arg,
@@ -18,28 +21,31 @@ public class Equation {
 	private String infix;
 	private String postfix;
 	
-	private SymbolType previousSymbol;
+	private List<SymbolType> symbolTypes;
 	private int opendBrackets;
 	private int closedBrackets;
+	
+	private boolean isComaSet = false;
+	private boolean canAddZero = true;
+	private boolean isFirstDigit = false; 
 	
 	public Equation() {
 		
 		converter = new InfixToPostfixConverter();
+		symbolTypes = new ArrayList<SymbolType>();
 		
 		this.infix="";
-		this.previousSymbol=SymbolType.None;
+		symbolTypes.add(SymbolType.None);
 		this.opendBrackets=0;
 		this.closedBrackets=0;
 	}
 	public void addToEquation(char symbol) {
-		boolean isComaSet = false;
-		boolean canAddZero = true;
-		boolean isFirstDigit = false; 	
+		SymbolType previousSymbol = symbolTypes.get(symbolTypes.size()-1);	
 		switch(symbol) {
 			case '0':
 				if(canAddZero) {
 					infix+=symbol;
-					previousSymbol=SymbolType.Zero;
+					symbolTypes.add(SymbolType.Zero);
 					if(isFirstDigit)
 						canAddZero=false;
 				}
@@ -50,7 +56,7 @@ public class Equation {
 					isComaSet=true;
 					canAddZero=true;
 					isFirstDigit=false;
-					previousSymbol=SymbolType.Coma;
+					symbolTypes.add(SymbolType.Coma);
 				}
 				break;
 			case '(':
@@ -58,7 +64,7 @@ public class Equation {
 					infix+=symbol;
 					canAddZero=true;
 					isFirstDigit=true;
-					previousSymbol=SymbolType.BracketOpend;
+					symbolTypes.add(SymbolType.BracketOpend);
 					opendBrackets++;
 				}
 				break;
@@ -67,23 +73,23 @@ public class Equation {
 					infix+=symbol;
 					isComaSet=false;
 					canAddZero=false;
-					previousSymbol=SymbolType.BracketClosed;
+					symbolTypes.add(SymbolType.BracketClosed);
 					closedBrackets++;
 				}
 				break;
 			case '!':
-			case '\u221A':
-				if(previousSymbol==SymbolType.None || previousSymbol==SymbolType.BracketOpend || previousSymbol==SymbolType.Operation2arg) {
+				if(previousSymbol==SymbolType.Number || previousSymbol==SymbolType.BracketClosed) {
 					infix+=symbol;
 					canAddZero=true;
 					isFirstDigit=true;
-					previousSymbol=SymbolType.Operation1arg;
+					symbolTypes.add(SymbolType.Operation1arg);
 				}
 				break;
 			case '+':
 			case '*':
 			case '\u00F7':
 			case '\u00D7':
+			case '\u221A':
 			case '%':
 			case '^':
 				if(previousSymbol == SymbolType.Number || previousSymbol==SymbolType.Zero || previousSymbol==SymbolType.BracketClosed || previousSymbol==SymbolType.Operation1arg ) {
@@ -91,7 +97,7 @@ public class Equation {
 					isComaSet=false;
 					canAddZero=true;
 					isFirstDigit=true;
-					previousSymbol=SymbolType.Operation2arg;
+					symbolTypes.add(SymbolType.Operation2arg);
 				}
 				break;
 			case '-':
@@ -100,7 +106,7 @@ public class Equation {
 					isComaSet=false;
 					canAddZero=true;
 					isFirstDigit=true;
-					previousSymbol=SymbolType.Operation2arg;
+					symbolTypes.add(SymbolType.Operation2arg);
 				}
 				break;
 			default:
@@ -108,7 +114,7 @@ public class Equation {
 					infix+=symbol;
 					canAddZero=true;
 					isFirstDigit=false;
-					previousSymbol=SymbolType.Number;
+					symbolTypes.add(SymbolType.Number);
 				}
 				break;
 			
@@ -118,8 +124,11 @@ public class Equation {
 		if(infix.isEmpty())
 			throw new ArrayIndexOutOfBoundsException("removing elements from empty equation");
 		infix=infix.substring(0, infix.length()-1);
+		symbolTypes.remove(symbolTypes.size()-1);
 	}
 	public void clearEquation() {
+		symbolTypes.clear();
+		symbolTypes.add(SymbolType.None);
 		infix="";
 	}
 	public void generatePostfix() throws IllegalArgumentException {
