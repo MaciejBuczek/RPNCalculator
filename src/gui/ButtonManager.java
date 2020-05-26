@@ -18,7 +18,7 @@ public class ButtonManager implements ActionListener{
 	//\u00F7 - division
 	//\u00D7 - multiplication
 	private char[] buttonActions = {'!','(',')','<','%','\u221A','^','\u00F7','7','8','9','\u00D7',
-			'4','5','6','-','1','2','3','+','C','0',',','='};
+			'4','5','6','-','1','2','3','+','C','0','.','='};
 	private GUI gui;
 	
 	public ButtonManager(GUI gui) {
@@ -54,6 +54,8 @@ public class ButtonManager implements ActionListener{
 				break;
 			case 'C':
 				gui.getEquation().clearEquation();
+				gui.getPostfixDisplay().refreshPostfix();
+				gui.getResultDisplayManager().refresh();
 				break;
 			case '=':
 				gui.getEquation().generatePostfix();

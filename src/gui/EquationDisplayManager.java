@@ -12,7 +12,10 @@ public class EquationDisplayManager extends DisplayManager{
 		label.setText(equation.getInfix());
 	}
 	public void refreshPostfix() {
-		label.setText(equation.getPostfix());
+		if(equation.isPostfixGenerated())
+			label.setText(equation.getPostfix());
+		else
+			label.setText("");
 	}
 	public Equation getEquation() {
 		return equation;

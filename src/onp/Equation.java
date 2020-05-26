@@ -3,6 +3,8 @@ package onp;
 import java.util.ArrayList;
 import java.util.List;
 
+import opertaion.PostfixCalculator;
+
 enum SymbolType{
 	None,
 	Operation1arg,
@@ -17,17 +19,18 @@ enum SymbolType{
 public class Equation {
 	
 	private InfixToPostfixConverter converter;
+	private PostfixCalculator calc;
 	
 	private String infix;
 	private String postfix;
+	
 	private double result;
 	private boolean isPostfixGenerated;
 	
 	private List<SymbolType> symbolTypes;
-	private int opendBrackets;
-	private int closedBrackets;
+	private int opendBrackets, closedBrackets, args, requiredArgs;
 	
-	private boolean isComaSet = false;
+	private boolean isDecimal = false;
 	private boolean canAddZero = true;
 	private boolean isFirstDigit = false; 
 	
@@ -36,11 +39,16 @@ public class Equation {
 		converter = new InfixToPostfixConverter();
 		symbolTypes = new ArrayList<SymbolType>();
 		
-		this.infix="";
+		this.infix="";	
+		
 		symbolTypes.add(SymbolType.None);
+		
 		this.opendBrackets=0;
 		this.closedBrackets=0;
+		this.args=0;
+		this.requiredArgs=0;
 		this.isPostfixGenerated=false;
+		this.calc = new PostfixCalculator();
 	}
 	public void addToEquation(char symbol) {
 		SymbolType previousSymbol = symbolTypes.get(symbolTypes.size()-1);	
@@ -53,10 +61,10 @@ public class Equation {
 						canAddZero=false;
 				}
 				break;
-			case ',':
-				if((previousSymbol==SymbolType.Number || previousSymbol==SymbolType.Zero) && !isComaSet) {
+			case '.':
+				if((previousSymbol==SymbolType.Number || previousSymbol==SymbolType.Zero) && !isDecimal) {
 					infix+=symbol;
-					isComaSet=true;
+					isDecimal=true;
 					canAddZero=true;
 					isFirstDigit=false;
 					symbolTypes.add(SymbolType.Coma);
@@ -74,7 +82,7 @@ public class Equation {
 			case ')':
 				if(previousSymbol==SymbolType.Number || previousSymbol==SymbolType.Zero) {
 					infix+=symbol;
-					isComaSet=false;
+					isDecimal=false;
 					canAddZero=false;
 					symbolTypes.add(SymbolType.BracketClosed);
 					closedBrackets++;
@@ -89,7 +97,6 @@ public class Equation {
 				}
 				break;
 			case '+':
-			case '*':
 			case '\u00F7':
 			case '\u00D7':
 			case '\u221A':
@@ -97,7 +104,7 @@ public class Equation {
 			case '^':
 				if(previousSymbol == SymbolType.Number || previousSymbol==SymbolType.Zero || previousSymbol==SymbolType.BracketClosed || previousSymbol==SymbolType.Operation1arg ) {
 					infix+=symbol;
-					isComaSet=false;
+					isDecimal=false;
 					canAddZero=true;
 					isFirstDigit=true;
 					symbolTypes.add(SymbolType.Operation2arg);
@@ -106,7 +113,7 @@ public class Equation {
 			case '-':
 				if(previousSymbol != SymbolType.None && previousSymbol != SymbolType.Coma && previousSymbol != SymbolType.Operation2arg) {
 					infix+=symbol;
-					isComaSet=false;
+					isDecimal=false;
 					canAddZero=true;
 					isFirstDigit=true;
 					symbolTypes.add(SymbolType.Operation2arg);
@@ -134,6 +141,7 @@ public class Equation {
 		symbolTypes.add(SymbolType.None);
 		isPostfixGenerated=false;
 		infix="";
+		postfix="";
 	}
 	public void generatePostfix() throws IllegalArgumentException {
 		if(closedBrackets != opendBrackets)
@@ -141,6 +149,7 @@ public class Equation {
 		
 		postfix = converter.convertInfixToPostfix(infix);
 		isPostfixGenerated=true;
+		result = calc.calculate(converter.getPostfixDivided());
 	}
 	public String getInfix() {
 		if(infix.isEmpty())
