@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,7 +28,6 @@ public class ButtonManager implements ActionListener{
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(10,30,10,30));
 		buttonPanel.setLayout(new GridLayout(6,4));
 		
-		List<JButton> buttons = new ArrayList<JButton>();
 		JButton tempButton;
 		for(int i=0; i<6; i++) {
 			for(int j=0; j<4; j++) {
@@ -40,7 +37,6 @@ public class ButtonManager implements ActionListener{
 				tempButton.addActionListener(this);
 				it++;
 				buttonPanel.add(tempButton);
-				buttons.add(tempButton);
 			}
 		}
 		frame.add(buttonPanel,BorderLayout.CENTER);
@@ -58,7 +54,11 @@ public class ButtonManager implements ActionListener{
 				gui.getResultDisplayManager().refresh();
 				break;
 			case '=':
-				gui.getEquation().generatePostfix();
+				try {
+					gui.getEquation().generatePostfix();
+				}catch(Exception exception) {
+					gui.displayError(exception.getMessage());
+				}
 				gui.getResultDisplayManager().refresh();
 				gui.getPostfixDisplay().refreshPostfix();
 				break;

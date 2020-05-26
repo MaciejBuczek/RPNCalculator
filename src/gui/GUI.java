@@ -18,14 +18,21 @@ public class GUI {
 	private ButtonManager buttonManager;
 	private EquationDisplayManager infixDisplay, postfixDisplay;
 	private ResultDisplayManager resultDisplay;
+	private ErrorDisplayManager errorDisplay;
+	
+	private JFrame calcFrame;
 	
 	private Equation equation;
 	
 	public GUI(Equation equation){		
 		
 		this.equation=equation;
+		this.errorDisplay = new ErrorDisplayManager();
+		generateCalcFrame();		
+	}
+	private void generateCalcFrame() {
 		
-		JFrame frame = new JFrame();
+		calcFrame = new JFrame();
 		JPanel displayPanel = new JPanel();
 		displayPanel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));
 		displayPanel.setLayout(new GridLayout(3,0));
@@ -42,17 +49,17 @@ public class GUI {
 		infixDisplay.refreshInfix();
 		resultDisplay.refresh();
 		
-		frame.add(displayPanel, BorderLayout.NORTH);
+		calcFrame.add(displayPanel, BorderLayout.NORTH);
 		
-		buttonManager.createButtons(frame, mainFont);
+		buttonManager.createButtons(calcFrame, mainFont);
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("RPN Calculator");
+		calcFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		calcFrame.setTitle("RPN Calculator");
 		
-		frame.setSize(new Dimension(350, 450));
-		frame.setMinimumSize(new Dimension(300, 400));
+		calcFrame.setSize(new Dimension(350, 450));
+		calcFrame.setMinimumSize(new Dimension(300, 400));
 		
-		frame.setVisible(true);
+		calcFrame.setVisible(true);
 	}
 	public Font getMainFont() {
 		return mainFont;
@@ -71,5 +78,8 @@ public class GUI {
 	}
 	public Equation getEquation() {
 		return equation;
+	}
+	public void displayError(String text) {
+		errorDisplay.displayError(text, calcFrame);
 	}
 }
