@@ -48,15 +48,16 @@ public class InfixToPostfixConverter {
 					stack.push(symbol);
 					break;
 				case ')':
-					if(isDecimal)
+					//if(isDecimal)
+					if(temp!="")
 						postfixDivided.add(temp);
-					else {
+					/*else {
 						for(int j=0; j<temp.length(); j++) {
 							postfixDivided.add(""+temp.charAt(j));
 						}
-					}
+					}*/
 					temp="";
-					isDecimal=false;
+					//isDecimal=false;
 					while(stack.peek() != '(') {
 						postfix+=stack.peek();
 						postfixDivided.add(stack.pop().toString());
@@ -71,15 +72,16 @@ public class InfixToPostfixConverter {
 				case '%':
 				case '+':
 				case '-':
-					if(isDecimal)
+					//if(isDecimal)
+					if(temp!="")
 						postfixDivided.add(temp);
-					else {
+					/*else {
 						for(int j=0; j<temp.length(); j++) {
 							postfixDivided.add(""+temp.charAt(j));
 						}
-					}
+					}*/
 					temp="";
-					isDecimal=false;
+					//isDecimal=false;
 					if(stack.isEmpty() || getSymbolPriority(symbol)>getSymbolPriority(stack.peek())) {
 						stack.push(symbol);
 					}else {
@@ -91,20 +93,21 @@ public class InfixToPostfixConverter {
 					}
 					break;
 				default:
-					if(symbol == '.')
-						isDecimal = true;
+					//if(symbol == '.')
+					//	isDecimal = true;
 					postfix+=symbol;
 					temp+=symbol;
 					break;
 			}
 		}
-		if(isDecimal)
+		//if(isDecimal)
+		if(temp!="")
 			postfixDivided.add(temp);
-		else {
+		/*else {
 			for(int j=0; j<temp.length(); j++) {
 				postfixDivided.add(""+temp.charAt(j));
 			}
-		}
+		}*/
 		while(!stack.isEmpty()) {
 			postfix+=stack.peek();
 			postfixDivided.add(stack.pop().toString());

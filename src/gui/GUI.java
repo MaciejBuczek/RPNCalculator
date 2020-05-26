@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -47,7 +48,10 @@ public class GUI {
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("RPN Calculator");
-		frame.pack();
+		
+		frame.setSize(new Dimension(350, 450));
+		frame.setMinimumSize(new Dimension(300, 400));
+		
 		frame.setVisible(true);
 	}
 	public Font getMainFont() {

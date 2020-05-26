@@ -131,10 +131,19 @@ public class Equation {
 		}
 	}
 	public void removeFromEquation() throws ArrayIndexOutOfBoundsException{
+		SymbolType symbolType;
 		if(infix.isEmpty())
 			throw new ArrayIndexOutOfBoundsException("removing elements from empty equation");
 		infix=infix.substring(0, infix.length()-1);
-		symbolTypes.remove(symbolTypes.size()-1);
+		symbolType = symbolTypes.remove(symbolTypes.size()-1);
+		if(symbolType==SymbolType.Coma)
+			isDecimal=false;
+		symbolType=symbolTypes.get(symbolTypes.size()-1);
+		if(symbolType != SymbolType.BracketClosed || symbolType != SymbolType.Operation1arg) {
+			canAddZero = true;
+			if(symbolType==SymbolType.Operation1arg)
+				isFirstDigit=true;
+		}
 	}
 	public void clearEquation() {
 		symbolTypes.clear();
@@ -142,6 +151,9 @@ public class Equation {
 		isPostfixGenerated=false;
 		infix="";
 		postfix="";
+		isDecimal = false;
+		canAddZero = true;
+		isFirstDigit = false; 
 	}
 	public void generatePostfix() throws IllegalArgumentException {
 		if(closedBrackets != opendBrackets)
