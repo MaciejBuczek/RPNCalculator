@@ -1,0 +1,31 @@
+<onp.Equation>
+  <converter>
+    <stack>
+      <stack/>
+    </stack>
+    <postfixDivided>
+      <string>3</string>
+      <string>!</string>
+    </postfixDivided>
+  </converter>
+  <calc>
+    <operationStack>
+      <stack/>
+    </operationStack>
+  </calc>
+  <infix>3!</infix>
+  <postfix>3!</postfix>
+  <result>6.0</result>
+  <isPostfixGenerated>true</isPostfixGenerated>
+  <symbolTypes>
+    <onp.SymbolType>None</onp.SymbolType>
+    <onp.SymbolType>Number</onp.SymbolType>
+    <onp.SymbolType>Operation1arg</onp.SymbolType>
+  </symbolTypes>
+  <opendBrackets>0</opendBrackets>
+  <closedBrackets>0</closedBrackets>
+  <isCompleated>true</isCompleated>
+  <isDecimal>false</isDecimal>
+  <canAddZero>true</canAddZero>
+  <isFirstDigit>true</isFirstDigit>
+</onp.Equation>

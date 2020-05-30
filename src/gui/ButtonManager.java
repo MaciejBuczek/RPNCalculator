@@ -22,7 +22,7 @@ public class ButtonManager implements ActionListener{
 	public ButtonManager(GUI gui) {
 		this.gui=gui;
 	}
-	public void createButtons(JFrame frame, Font font) {
+	public void createOperationButtons(JFrame frame, Font font) {
 		int it=0;
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(10,30,10,30));
@@ -41,12 +41,32 @@ public class ButtonManager implements ActionListener{
 		}
 		frame.add(buttonPanel,BorderLayout.CENTER);
 	}
+	public void createSecondaryButtons(JPanel topPanel, Font font) {
+		JPanel secondaryButtons = new JPanel();
+		JButton tempButton;
+		secondaryButtons.setLayout(new GridLayout(0,4));
+		
+		tempButton =new JButton("?");
+		tempButton.setFont(font);
+		tempButton.setActionCommand("?");
+		tempButton.addActionListener(this);
+		secondaryButtons.add(tempButton);
+		
+		topPanel.add(secondaryButtons, BorderLayout.NORTH);
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		char command = e.getActionCommand().charAt(0);
 		switch(command) {
+			case '?':
+				gui.displayAbout();
+				break;
 			case '<':
+				try {
 				gui.getEquation().removeFromEquation();
+				}catch(Exception exception) {
+					gui.displayError(exception.getMessage());
+				}
 				break;
 			case 'C':
 				gui.getEquation().clearEquation();

@@ -19,8 +19,8 @@ public class ErrorDisplayManager implements ActionListener{
 	private JFrame errorFrame;
 	private JLabel errorTextLabel;
 	
-	private Font errorTitleFont = new Font("Verdana", Font.BOLD, 25);
-	private Font errorTextFont = new Font("Verdana", Font.PLAIN, 20);
+	private Font errorTitleFont = new Font("Verdana", Font.BOLD, 20);
+	private Font errorTextFont = new Font("Verdana", Font.PLAIN, 15);
 	
 	public ErrorDisplayManager() {
 		

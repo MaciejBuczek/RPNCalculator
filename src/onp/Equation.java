@@ -1,7 +1,12 @@
 package onp;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import opertaion.PostfixCalculator;
 
@@ -28,7 +33,8 @@ public class Equation {
 	private boolean isPostfixGenerated;
 	
 	private List<SymbolType> symbolTypes;
-	private int opendBrackets, closedBrackets, args, requiredArgs;
+	private int opendBrackets, closedBrackets;
+	private boolean isCompleated = true;
 	
 	private boolean isDecimal = false;
 	private boolean canAddZero = true;
@@ -45,8 +51,6 @@ public class Equation {
 		
 		this.opendBrackets=0;
 		this.closedBrackets=0;
-		this.args=0;
-		this.requiredArgs=0;
 		this.isPostfixGenerated=false;
 		this.calc = new PostfixCalculator();
 	}
@@ -55,6 +59,7 @@ public class Equation {
 		switch(symbol) {
 			case '0':
 				if(canAddZero) {
+					isCompleated = true;
 					infix+=symbol;
 					symbolTypes.add(SymbolType.Zero);
 					if(isFirstDigit)
@@ -81,7 +86,7 @@ public class Equation {
 				}
 				break;
 			case ')':
-				if(previousSymbol==SymbolType.Number || previousSymbol==SymbolType.Zero) {
+				if(previousSymbol==SymbolType.Number || previousSymbol==SymbolType.Zero || previousSymbol==SymbolType.BracketClosed) {
 					infix+=symbol;
 					isDecimal=false;
 					canAddZero=false;
@@ -104,6 +109,7 @@ public class Equation {
 			case '%':
 			case '^':
 				if(previousSymbol == SymbolType.Number || previousSymbol==SymbolType.Zero || previousSymbol==SymbolType.BracketClosed || previousSymbol==SymbolType.Operation1arg ) {
+					isCompleated=false;
 					infix+=symbol;
 					isDecimal=false;
 					canAddZero=true;
@@ -113,6 +119,7 @@ public class Equation {
 				break;
 			case '-':
 				if(previousSymbol != SymbolType.None && previousSymbol != SymbolType.Coma && previousSymbol != SymbolType.Operation2arg) {
+					isCompleated=false;
 					infix+=symbol;
 					isDecimal=false;
 					canAddZero=true;
@@ -122,6 +129,7 @@ public class Equation {
 				break;
 			default:
 				if(previousSymbol != SymbolType.BracketClosed) {
+					isCompleated=true;
 					infix+=symbol;
 					canAddZero=true;
 					isFirstDigit=false;
@@ -135,6 +143,13 @@ public class Equation {
 		SymbolType symbolType;
 		if(infix.isEmpty())
 			throw new ArrayIndexOutOfBoundsException("removing elements from empty equation");
+		
+		if(symbolTypes.get(symbolTypes.size()-1)==SymbolType.Operation2arg)
+			isCompleated=true;
+		else
+			if(symbolTypes.get(symbolTypes.size()-2) ==SymbolType.Operation2arg)
+				isCompleated=false;
+			
 		infix=infix.substring(0, infix.length()-1);
 		symbolType = symbolTypes.remove(symbolTypes.size()-1);
 		if(symbolType==SymbolType.Coma)
@@ -155,14 +170,18 @@ public class Equation {
 		isDecimal = false;
 		canAddZero = true;
 		isFirstDigit = false; 
+		isCompleated=true;
 	}
 	public void generatePostfix() throws IllegalArgumentException {
 		if(closedBrackets != opendBrackets)
 			throw new IllegalArgumentException("Not all brackets are closed");
+		if(!isCompleated)
+			throw new IllegalArgumentException("Equation is not completed");
 		
 		postfix = converter.convertInfixToPostfix(infix);
 		isPostfixGenerated=true;
 		result = calc.calculate(converter.getPostfixDivided());
+		equationToXML("History.xml");
 	}
 	public String getInfix() {
 		if(infix.isEmpty())
@@ -182,4 +201,18 @@ public class Equation {
 	public boolean isPostfixGenerated() {
 		return isPostfixGenerated;
 	}
+	public void equationToXML(String filename){
+	        if (filename != null) {
+	            try {
+	                FileWriter f = new FileWriter(filename);
+	                BufferedWriter out = new BufferedWriter(f);
+	                XStream mapping = new XStream(new DomDriver());
+	                String xml = mapping.toXML(this);
+	                out.write(xml);
+	                out.close();
+	            } catch (Exception e) {
+	                System.out.println("Error: " + e.getMessage());
+	            }
+	        }
+	    }
 }

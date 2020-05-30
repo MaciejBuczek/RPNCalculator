@@ -19,7 +19,7 @@ public class GUI {
 	private EquationDisplayManager infixDisplay, postfixDisplay;
 	private ResultDisplayManager resultDisplay;
 	private ErrorDisplayManager errorDisplay;
-
+	private AboutFrame aboutFrame;
 	
 	private JFrame calcFrame;
 	
@@ -29,20 +29,24 @@ public class GUI {
 		
 		this.equation=equation;
 		this.errorDisplay = new ErrorDisplayManager();
+		this.aboutFrame = new AboutFrame();
 		generateCalcFrame();		
 	}
 	private void generateCalcFrame() {
-		
-		calcFrame = new JFrame();
-		JPanel displayPanel = new JPanel();
-		displayPanel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));
-		displayPanel.setLayout(new GridLayout(3,0));
 		
 		infixDisplay = new EquationDisplayManager(equation);
 		postfixDisplay = new EquationDisplayManager(equation);
 		resultDisplay = new ResultDisplayManager(equation);
 		
 		buttonManager = new ButtonManager(this);
+		
+		calcFrame = new JFrame();
+		JPanel displayPanel = new JPanel();
+		displayPanel.setBorder(BorderFactory.createEmptyBorder(10,30,10,30));
+		
+		displayPanel.setLayout(new GridLayout(4,0));
+		
+		buttonManager.createSecondaryButtons(displayPanel, mainFont);
 		
 		infixDisplay.createPanel(displayPanel, equationFont);
 		postfixDisplay.createPanel(displayPanel, equationFont);
@@ -52,7 +56,7 @@ public class GUI {
 		
 		calcFrame.add(displayPanel, BorderLayout.NORTH);
 		
-		buttonManager.createButtons(calcFrame, mainFont);
+		buttonManager.createOperationButtons(calcFrame, mainFont);
 		
 		calcFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		calcFrame.setTitle("RPN Calculator");
@@ -82,5 +86,8 @@ public class GUI {
 	}
 	public void displayError(String text) {
 		errorDisplay.displayError(text, calcFrame);
+	}
+	public void displayAbout() {
+		aboutFrame.displayAbout(calcFrame);
 	}
 }
