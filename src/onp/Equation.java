@@ -71,7 +71,8 @@ public class Equation {
 				}
 				break;
 			case '(':
-				if(previousSymbol==SymbolType.Operation1arg || previousSymbol==SymbolType.Operation2arg || previousSymbol==SymbolType.None) {
+				if(previousSymbol==SymbolType.Operation1arg || previousSymbol==SymbolType.Operation2arg 
+				|| previousSymbol==SymbolType.None || previousSymbol==SymbolType.BracketOpend) {
 					infix+=symbol;
 					canAddZero=true;
 					isFirstDigit=true;

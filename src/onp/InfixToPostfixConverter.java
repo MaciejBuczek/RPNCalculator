@@ -35,34 +35,36 @@ public class InfixToPostfixConverter {
 	
 	public String convertInfixToPostfix(String infix) {
 		
+		postfixDivided.clear();
 		String postfix = "";
 		char symbol;
-		boolean isDecimal = false;
 		String temp = "";
+		boolean isNegative=false;
 		
 		for(int i=0; i<infix.length(); i++) {
 			symbol=infix.charAt(i);
 			switch(symbol) {
 			
 				case '(':
-					stack.push(symbol);
+					if(infix.charAt(i+1)=='-') {
+						isNegative=true;
+						temp+='-';
+					}
+					else
+						stack.push(symbol);
 					break;
 				case ')':
-					//if(isDecimal)
-					if(temp!="")
+					if(temp!="") {
 						postfixDivided.add(temp);
-					/*else {
-						for(int j=0; j<temp.length(); j++) {
-							postfixDivided.add(""+temp.charAt(j));
-						}
-					}*/
-					temp="";
-					//isDecimal=false;
-					while(stack.peek() != '(') {
-						postfix+=stack.peek();
-						postfixDivided.add(stack.pop().toString());
+						temp="";
 					}
-					stack.pop();
+					if(!stack.isEmpty() && !isNegative) {
+						while(stack.peek() != '(') {
+							postfixDivided.add(stack.pop().toString());
+						}
+						stack.pop();
+					}
+					isNegative=false;
 					break;
 				case '!':
 				case '^':
@@ -72,45 +74,33 @@ public class InfixToPostfixConverter {
 				case '%':
 				case '+':
 				case '-':
-					//if(isDecimal)
-					if(temp!="")
-						postfixDivided.add(temp);
-					/*else {
-						for(int j=0; j<temp.length(); j++) {
-							postfixDivided.add(""+temp.charAt(j));
+					if(!isNegative) {
+						if(temp!="") {
+							postfixDivided.add(temp);
+							temp="";
 						}
-					}*/
-					temp="";
-					//isDecimal=false;
-					if(stack.isEmpty() || getSymbolPriority(symbol)>getSymbolPriority(stack.peek())) {
-						stack.push(symbol);
-					}else {
-						while(!stack.isEmpty() && getSymbolPriority(stack.peek())>=getSymbolPriority(symbol)) {
-							postfix+=stack.peek();
-							postfixDivided.add(stack.pop().toString());
+						if(stack.isEmpty() || getSymbolPriority(symbol)>getSymbolPriority(stack.peek())) {
+							stack.push(symbol);
+						}else {
+							while(!stack.isEmpty() && getSymbolPriority(stack.peek())>=getSymbolPriority(symbol)) {
+								postfixDivided.add(stack.pop().toString());
+							}
+							stack.push(symbol);
 						}
-						stack.push(symbol);
 					}
 					break;
 				default:
-					//if(symbol == '.')
-					//	isDecimal = true;
-					postfix+=symbol;
 					temp+=symbol;
 					break;
 			}
 		}
-		//if(isDecimal)
 		if(temp!="")
 			postfixDivided.add(temp);
-		/*else {
-			for(int j=0; j<temp.length(); j++) {
-				postfixDivided.add(""+temp.charAt(j));
-			}
-		}*/
 		while(!stack.isEmpty()) {
-			postfix+=stack.peek();
 			postfixDivided.add(stack.pop().toString());
+		}
+		for(String arg : postfixDivided) {
+			postfix += arg;
 		}
 		return postfix;
 	}

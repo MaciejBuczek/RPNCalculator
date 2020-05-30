@@ -19,6 +19,7 @@ public class GUI {
 	private EquationDisplayManager infixDisplay, postfixDisplay;
 	private ResultDisplayManager resultDisplay;
 	private ErrorDisplayManager errorDisplay;
+
 	
 	private JFrame calcFrame;
 	

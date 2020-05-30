@@ -71,13 +71,15 @@ public class PostfixCalculator {
 				}
 				break;
 			case '-':
-				if(isArg2Set) {
-					arg1=new Subtraction(arg1, arg2);
-					isArg2Set=false;
-				}else {
-					arg1=new Subtraction(operationStack.pop(), arg1);
+				if(symbol.length()==1) {
+					if(isArg2Set) {
+						arg1=new Subtraction(arg1, arg2);
+						isArg2Set=false;
+					}else {
+						arg1=new Subtraction(operationStack.pop(), arg1);
+					}
+					break;
 				}
-				break;
 			default:
 				if(!isArg1Set) {
 					arg1 = new Operation1Arg(Double.parseDouble(symbol));
